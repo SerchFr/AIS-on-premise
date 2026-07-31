@@ -7,3 +7,4 @@
 | Site NGINX | Conteneur Web | 8080 | Non | `nginx-demo/` |
 | WordPress | Application Web | 8085 | Configuration applicative | `wordpress-compose/` |
 | MariaDB | Base de données | Aucun port publié | Oui, volume Docker | `wordpress-compose/` |
+| Git | Application developpeur | Aucun port | oui | ~/documents/AIS/on-prem |
