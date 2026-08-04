@@ -1,0 +1,19 @@
+#!/bin/bash
+# ============================================================
+# Auteur : [Sergio MARTINEZ] — Date : 2026-08-03
+# Module : Docker compose for openLDAP. Test of openLDAP
+# 
+# De l'instance docker crée avec le fichier docker-compose.yml
+#
+# 
+# Tester que le service es active
+# Tester les logs
+#
+#
+# Usage :
+#       ./Test-openLdap
+#
+# Durée d'exécution : ~1 min le temps de lancer les tests
+# ============================================================
+
+

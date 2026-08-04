@@ -1,0 +1,94 @@
+
+
+***********
+Identifiez les services décrits dans les documents.
+
+
+| Ordre | Service | Délai cible |
+|-------:|----------|------------:|
+| 1 | Authentification | 2 heures |
+| 2 | Partage de fichiers | 8 heures |
+| 3 | Sauvegardes | 24 heures |
+| 4 | Messagerie | 24 heures |
+| 5 | Supervision | 48 heures |
+
+************
+Repérez les informations qui semblent toujours valides.
+
+Les procédures pour remetre en état les services
+
+
+
+************
+Relevez les informations qui paraissent obsolètes ou incomplètes.
+
+L'architecture utilise surtout de VM, serait-il possible de faire de dockers ?
+
+
+************
+Identifiez les services ou procédures qui ne sont plus adaptés à l’infrastructure actuelle.
+
+Controleur de domaine peut etre dans un docker
+La messagerie est dans un serveur, il peut être dans un docker 
+
+
+
+
+************
+Listez les nouveaux services qui devront être intégrés dans les documents au cours du projet.
+
+Il manque la reference pour les ip, il parle de l'inventaire, la question est si l'information est disponible
+Service de sécurisation avec fail2ban
+restrict SSH access  (key et pas de mot de passe, pas de root login)
+Activer un firewall
+- Pour le docker daemon
+Restric l'accès au docker socket (seulement les administrateurs peuvent y accèder)
+Ne pas exposer le docker API sur TCP
+Activer daemon docker logging
+- Les images utilisés dans les dockers
+pin image version et pas utiliser 'latest"
+Faire la mise à jour et scan images pour vulnerabilités
+Enlever unnecessary packages from images  --- utiliser alpine ou distroless
+Enlever "build tools" de l'image finale
+Ne pas lancer containers comme root, pour ça    
+   RUN useradd -m appuser
+   USER appuser
+   or
+   docker run --user 1000:1000
+
+Eviter containers priviledged
+   docker run --privileged
+
+Definir et limiter les ressources
+   docker run \
+	--memory=512m \
+	--cpus=1 \
+	--pids-limit=200
+
+Utiliser "read only filesystems"
+	docker run \
+	--read-only \
+	--tmpfs /tm
+
+Ne pas utiliser .env pour les "secrets" et plutôt utiliser docker secrets (swarm), kubernetes secrets ou external secret managers
+
+Revoir le réseau pour le faire plus restrinte
+  utiliser cutom réseau docker
+  ouvirir seulement les ports que nous avons besoin
+  utiliser internal networks pour backend services
+  appliquer le firewall rules sur les services exposés
+
+- Scan images toutes les 3 mois 
+  ex: Docker scout, trivy, grype, clair
+
+signer et vérifier les images, par exemple avec docker content trust / notary ou sigstore cosign
+
+Monitor et log : prometheus, grafana, loki, elk/openSeardch, Falco (runtime security)
+
+C'est mieux de recreer containers et pas les modifier sur place
+
+Utiliser de profiles de sécurité : AppArmor, SELinux, Seccomp profiles 
+
+************
+Classez les mises à jour à effectuer par ordre de priorité.
+
