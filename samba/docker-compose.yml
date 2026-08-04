@@ -1,0 +1,26 @@
+services:
+
+  samba:
+
+    build: .
+
+    container_name: samba
+
+    hostname: samba
+
+    restart: unless-stopped
+
+    ports:
+      - "139:139"
+      - "445:445"
+
+    volumes:
+      - ./shares:/srv/samba
+      - ./smb.conf:/etc/samba/smb.conf
+
+    networks:
+      - ldap-network
+
+networks:
+  ldap-network:
+    external: true

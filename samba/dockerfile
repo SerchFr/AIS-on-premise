@@ -1,0 +1,19 @@
+FROM ubuntu:24.04
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt update && \
+    apt install -y \
+        samba \
+        smbclient \
+        ldap-utils \
+        smbldap-tools \
+        libnss-ldapd \
+        libpam-ldapd && \
+    apt clean
+
+COPY entrypoint.sh /entrypoint.sh
+
+RUN chmod +x /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]
