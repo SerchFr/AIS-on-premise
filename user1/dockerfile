@@ -1,0 +1,13 @@
+FROM debian:12
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt update && apt install -y \
+    smbclient \
+    cifs-utils \
+    nano \
+    iputils-ping \
+    dnsutils \
+    && apt clean
+
+CMD ["sleep", "infinity"]

@@ -3,27 +3,15 @@ FROM ubuntu:24.04
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt update && \
-    apt install -y \
-        iproute2 \
-        samba \
-        #samba-doc \
-        samba-common-bin \
-        smbldap-tools \
-        libnss-ldapd \
-        libpam-ldapd \
-        ldap-utils \
-        smbclient && \
+    apt install -y samba samba-common-bin smbclient iproute2 && \
+    mkdir -p /var/log/samba /run/samba /srv/samba/public && \
+    chown -R root:root /var/log/samba /run/samba /srv/samba && \
+    chmod -R 755 /var/log/samba /run/samba /srv/samba && \
+    rm -rf /var/lib/apt/lists/* \
     apt clean
 
-COPY entrypoint.sh /entrypoint.sh
+COPY smb.conf /etc/samba/smb.conf
 
-RUN chmod +x /entrypoint.sh
+EXPOSE 445 139
 
-#RUN mkdir -p /opt/samba-schema && \
-#    cp /usr/share/doc/samba/examples/LDAP/samba.schema /opt/samba-schema/
-    
-#ENTRYPOINT ["/entrypoint.sh"]
-#ENTRYPOINT ["/bin/bash"]
-ENTRYPOINT ["/bin/bash", "-c", "sleep infinity"]
-
-#RUN dpkg -L samba
+CMD ["smbd", "--foreground", "--no-process-group"]

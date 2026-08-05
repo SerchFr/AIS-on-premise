@@ -1,26 +1,23 @@
 services:
-
   samba:
-
     build: .
-
     container_name: samba
-
-    #command: sleep infinity
     hostname: samba
     restart: unless-stopped
 
     #ports:
-    #  - "139:1390"
-    #  - "445:4450"
+    #  - "445:445"
+    #  - "139:139"
 
     volumes:
       - ./shares:/srv/samba
-      - ./smb.conf:/etc/samba/smb.conf
 
     networks:
       - ldap-network
+      #- samba-lan
+        #ipv4_address: 192.168.2.20
 
 networks:
+  #samba-lan:
   ldap-network:
     external: true

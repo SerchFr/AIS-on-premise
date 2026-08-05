@@ -1,0 +1,20 @@
+services:
+
+  samba-client:
+
+    build: .
+
+    container_name: samba-client
+
+    hostname: user-pc
+
+    restart: unless-stopped
+
+    networks:
+      - ldap-network
+
+
+networks:
+
+  ldap-network:
+    external: true
