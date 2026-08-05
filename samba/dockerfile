@@ -4,16 +4,26 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt update && \
     apt install -y \
+        iproute2 \
         samba \
-        smbclient \
-        ldap-utils \
+        #samba-doc \
+        samba-common-bin \
         smbldap-tools \
         libnss-ldapd \
-        libpam-ldapd && \
+        libpam-ldapd \
+        ldap-utils \
+        smbclient && \
     apt clean
 
 COPY entrypoint.sh /entrypoint.sh
 
 RUN chmod +x /entrypoint.sh
 
-ENTRYPOINT ["/entrypoint.sh"]
+#RUN mkdir -p /opt/samba-schema && \
+#    cp /usr/share/doc/samba/examples/LDAP/samba.schema /opt/samba-schema/
+    
+#ENTRYPOINT ["/entrypoint.sh"]
+#ENTRYPOINT ["/bin/bash"]
+ENTRYPOINT ["/bin/bash", "-c", "sleep infinity"]
+
+#RUN dpkg -L samba
