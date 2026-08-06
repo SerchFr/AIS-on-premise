@@ -4,14 +4,17 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt update && \
     apt install -y samba samba-common-bin smbclient iproute2 && \
-    mkdir -p /var/log/samba /run/samba /srv/samba/public && \
+    mkdir -p /var/log/samba /run/samba /srv/samba/data && \
     chown -R root:root /var/log/samba /run/samba /srv/samba && \
     chmod -R 755 /var/log/samba /run/samba /srv/samba && \
     rm -rf /var/lib/apt/lists/* \
     apt clean
 
 COPY smb.conf /etc/samba/smb.conf
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
 
 EXPOSE 445 139
 
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 CMD ["smbd", "--foreground", "--no-process-group"]

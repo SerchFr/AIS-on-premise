@@ -14,10 +14,10 @@ services:
 
     networks:
       - ldap-network
-      #- samba-lan
-        #ipv4_address: 192.168.2.20
 
 networks:
   #samba-lan:
   ldap-network:
     external: true
+    
+

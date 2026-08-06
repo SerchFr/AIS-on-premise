@@ -1,0 +1,78 @@
+services:
+
+#  mariadb:
+#    image: mariadb:11
+#    container_name: mariadb
+#    restart: unless-stopped
+#    environment:
+#      MYSQL_ROOT_PASSWORD: rootpassword
+#      MYSQL_DATABASE: roundcube
+#      MYSQL_USER: roundcube
+#      MYSQL_PASSWORD: roundcubepassword
+#    volumes:
+#      - mariadb_data:/var/lib/mysql
+#    networks:
+#      - mailnet
+
+  postfix:
+    image: boky/postfix
+    container_name: postfix
+    hostname: mail.example.com
+    restart: unless-stopped
+    environment:
+      ALLOWED_SENDER_DOMAINS: example.com
+    ports:
+      - "25:25"
+      - "587:587"
+    volumes:
+      - ./postfix/main.cf:/etc/postfix/main.cf
+      - ./postfix/master.cf:/etc/postfix/master.cf
+      - mail_data:/var/mail
+    depends_on:
+      - dovecot
+    networks:
+      - mailnet
+
+  dovecot:
+    image: dovecot/dovecot
+    container_name: dovecot
+    restart: unless-stopped
+    ports:
+      - "143:143"
+      - "993:993"
+    volumes:
+      - ./dovecot/dovecot.conf:/etc/dovecot/dovecot.conf
+      - ./dovecot/conf.d:/etc/dovecot/conf.d
+      - mail_data:/var/mail
+    networks:
+      - mailnet
+
+  roundcube:
+    image: roundcube/roundcubemail:latest
+    container_name: roundcube
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    environment:
+      ROUNDCUBEMAIL_DB_TYPE: mysql
+      ROUNDCUBEMAIL_DB_HOST: mariadb
+      ROUNDCUBEMAIL_DB_NAME: roundcube
+      ROUNDCUBEMAIL_DB_USER: roundcube
+      ROUNDCUBEMAIL_DB_PASSWORD: roundcubepassword
+
+      ROUNDCUBEMAIL_DEFAULT_HOST: tls://dovecot
+      ROUNDCUBEMAIL_SMTP_SERVER: tls://postfix
+      ROUNDCUBEMAIL_SMTP_PORT: 587
+
+    depends_on:
+      - postfix
+      - dovecot
+    networks:
+      - mailnet
+
+volumes:
+  mail_data:
+
+networks:
+  mailnet:
+    driver: bridge
