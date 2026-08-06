@@ -1,35 +1,28 @@
 #!/bin/bash
 set -e
 
-USER_NAME="${SAMBA_USER:-sambauser}"
-USER_PASS="${SAMBA_PASS:-sambauser}"
+echo "Attente du serveur OpenLDAP..."
 
-echo "=== Démarrage du conteneur Samba ==="
+until nc -z openldap 3890; do
+    echo "OpenLDAP n'est pas encore disponible..."
+    sleep 2
+done
 
-# --- 1. Le compte Linux ---
-if ! id "$USER_NAME" &>/dev/null; then
-    echo "Création du compte Linux : $USER_NAME"
-    useradd -M -s /usr/sbin/nologin "$USER_NAME"
-else
-    echo "Compte Linux déjà présent : $USER_NAME"
-fi
+echo "OpenLDAP est accessible."
 
-# --- 2. Le compte Samba ---
-if ! pdbedit -L 2>/dev/null | grep -q "^${USER_NAME}:"; then
-    echo "Création du compte Samba : $USER_NAME"
-    printf '%s\n%s\n' "$USER_PASS" "$USER_PASS" | smbpasswd -s -a "$USER_NAME"
-else
-    echo "Compte Samba déjà présent : $USER_NAME"
-fi
+mkdir -p /run/nslcd
+chown nslcd:nslcd /run/nslcd
 
-# --- 3. Le dossier partagé ---
-mkdir -p /srv/samba/data
-chown "$USER_NAME":"$USER_NAME" /srv/samba/data
-chmod 2775 /srv/samba/data
+mkdir -p /srv/share
+chmod 0770 /srv/share
 
-# --- 4. Vérification de la configuration ---
-testparm -s > /dev/null
+echo "Démarrage de nslcd..."
+nslcd
 
-# --- 5. Lancement ---
-echo "=== Samba démarre ==="
+sleep 2
+
+echo "Test de la configuration Samba..."
+testparm -s
+
+echo "Démarrage de Samba..."
 exec smbd --foreground --no-process-group

@@ -11,6 +11,9 @@ services:
 
     volumes:
       - ./shares:/srv/samba
+      - ./smb.conf:/etc/samba/smb.conf:ro
+      - ./nslcd.conf:/etc/nslcd.conf:ro
+      - ./nsswitch.conf:/etc/nsswitch.conf:ro
 
     networks:
       - ldap-network
