@@ -1,0 +1,5 @@
+# Run daily at 3:00 AM. Adjust path to where this project lives on the host.
+# `docker compose run --rm` starts a fresh, one-off container each time
+# (no leftover container, no restart policy needed), then exits.
+
+0 3 * * * cd /opt/borg-backup && /usr/bin/docker compose run --rm borg-backup >> /var/log/borg-backup.log 2>&1
