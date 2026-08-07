@@ -1,6 +1,6 @@
-backup-data /
-borg-repo /
-excludes.txt /
-ldap-dumps /
+backup-data/
+borg-repo/
+excludes.txt/
+ldap-dumps/
 .env
 
