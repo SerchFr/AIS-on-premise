@@ -6,6 +6,7 @@ FROM alpine:3.20
 RUN apk add --no-cache \
         borgbackup \
         bash \
+        docker-cli \
         tzdata
 
 COPY backup.sh /usr/local/bin/backup.sh
