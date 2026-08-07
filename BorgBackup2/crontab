@@ -1,0 +1,4 @@
+# Executer tous les jours à 3h du matin
+
+#0 3 * * * cd /opt/borg-backup && /usr/bin/docker compose run --rm borg-backup >> /var/log/borg-backup.log 2>&1
+40 15 * * * cd /opt/borg-backup && /usr/bin/docker compose run --rm borg-backup >> /var/log/borg-backup.log 2>&1
