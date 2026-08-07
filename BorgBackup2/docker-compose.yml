@@ -21,9 +21,7 @@ services:
       # Data you want backed up (read-only is enough, borg never writes here)
       - ./backup-data:/data
 
-      # One line per thing you want backed up. Mount each source under
-      # /data/<name> so archive paths stay stable and readable even if
-      # the host path changes later. Add/remove lines as needed.
+      # Configurations, files that we will find also in git
       - /home/sergio/Documents/AIS/on-premise/openldap:/data/dockersConfig/openldap:ro
       #- /home/sergio/Documents/AIS/on-premise/openldap:/data/dockersConfig/openldap:ro
       #- /home/sergio/Documents/AIS/on-premise/openldap:/data/dockersConfig/openldap:ro
@@ -43,9 +41,7 @@ services:
 
       # Raw copy of the LDAP container's actual volumes, read-only, as a
       # belt-and-suspenders fallback alongside the LDIF export. These MUST
-      # be the exact same named volumes your LDAP container uses — check
-      # with `docker volume ls` / your ldap docker-compose.yml and fix the
-      # left-hand side below if the names differ.
+      # be the exact same named volumes your LDAP container uses 
       - openldap_openldap-data:/data/ldap-raw/data
       - openldap_openldap-conf:/data/ldap-raw/conf
 
