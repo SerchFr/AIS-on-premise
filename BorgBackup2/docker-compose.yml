@@ -24,7 +24,10 @@ services:
       # One line per thing you want backed up. Mount each source under
       # /data/<name> so archive paths stay stable and readable even if
       # the host path changes later. Add/remove lines as needed.
-      #- /home/sergio/Documents/AIS/on-premise:/data/documents:ro
+      - /home/sergio/Documents/AIS/on-premise/openldap:/data/dockersConfig/openldap:ro
+      #- /home/sergio/Documents/AIS/on-premise/openldap:/data/dockersConfig/openldap:ro
+      #- /home/sergio/Documents/AIS/on-premise/openldap:/data/dockersConfig/openldap:ro
+      #- /home/sergio/Documents/AIS/on-premise/openldap:/data/dockersConfig/openldap:ro
       #- /etc:/data/etc:ro
 
       # --- LDAP backup ---
@@ -61,9 +64,8 @@ services:
 volumes:
   borg_cache:
   borg_config:
-  # These must be marked external and must match the real volume names
-  # used by your LDAP container — Docker will otherwise silently create
-  # new, empty volumes with these names instead of finding the real ones.
+
+  # Must be marked as external otherwise they will silently created
   openldap_openldap-data:
     external: true
   openldap_openldap-conf:
