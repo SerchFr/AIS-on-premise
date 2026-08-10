@@ -1,0 +1,28 @@
+services:
+  postfix:
+    build: .
+    container_name: postfix
+    hostname: mail.AlpesNet.local
+
+    ports:
+    - "2525:25"
+
+    volumes:
+    - ./config/main.cf:/etc/postfix/main.cf:ro
+    # pour utiliser les utilisateurs à la main
+    #- ./config/vmailbox:/etc/postfix/vmailbox:ro
+    # Pour utilsier ldap
+    - ./config/ldap-virtual-mailbox.cf:/etc/postfix/ldap-virtual-mailbox.cf:ro
+    - maildata:/var/mail/vhosts
+
+    restart: unless-stopped
+
+    networks:
+      - ldap-network
+
+networks:
+  ldap-network:
+    external: true
+    
+volumes:
+  maildata:
