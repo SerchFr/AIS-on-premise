@@ -1,0 +1,26 @@
+services:
+  step-ca:
+    image: smallstep/step-ca:latest
+    container_name: step-ca
+    hostname: ca.alpesnet.local
+
+    environment:
+      DOCKER_STEPCA_INIT_NAME: "Alpes Net"
+      DOCKER_STEPCA_INIT_DNS_NAMES: "ca.alpesnet.local,step-ca,localhost"
+      DOCKER_STEPCA_INIT_PROVISIONER_NAME: "admin"
+      DOCKER_STEPCA_INIT_PASSWORD: "step123"
+    
+    ports:
+      - "9000:9000"
+
+    volumes:
+      - ./data:/home/step
+
+    restart: unless-stopped
+
+    networks:
+      - ldap-network
+      
+networks:
+  ldap-network:
+    external: true
