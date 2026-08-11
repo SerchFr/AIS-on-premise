@@ -7,6 +7,7 @@ RUN apt-get update && \
     dovecot-core \
     dovecot-imapd \
     dovecot-ldap \
+    gettext-base \
     ldap-utils
 
 RUN groupadd -g 5000 vmail && \

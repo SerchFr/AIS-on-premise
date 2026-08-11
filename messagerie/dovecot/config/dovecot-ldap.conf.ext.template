@@ -1,6 +1,6 @@
 hosts = openldap:3890
 dn = cn=admin,dc=AlpesNet,dc=local
-dnpass =jskrYrMtoP9QAUVx
+dnpass ="${dnpass_passwword}"
 ldap_version = 3
 base = ou=people,dc=AlpesNet,dc=local
 scope = subtree
