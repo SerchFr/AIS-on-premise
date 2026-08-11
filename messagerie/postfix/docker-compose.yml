@@ -8,12 +8,14 @@ services:
     - "2525:25"
 
     volumes:
+    - mail_vhosts_data:/var/mail/vhosts   # was: postfix_maildata:/var/mail/vhosts
     - ./config/main.cf:/etc/postfix/main.cf:ro
+    - ./master.cf:/etc/postfix/master.cf
     # pour utiliser les utilisateurs à la main
     #- ./config/vmailbox:/etc/postfix/vmailbox:ro
     # Pour utilsier ldap
     - ./config/ldap-virtual-mailbox.cf:/etc/postfix/ldap-virtual-mailbox.cf:ro
-    - maildata:/var/mail/vhosts
+    #- maildata:/var/mail/vhosts
 
     restart: unless-stopped
 
@@ -25,4 +27,6 @@ networks:
     external: true
     
 volumes:
-  maildata:
+  mail_vhosts_data:
+    external: true
+#  maildata:

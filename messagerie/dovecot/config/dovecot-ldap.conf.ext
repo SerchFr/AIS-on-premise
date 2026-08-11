@@ -1,0 +1,10 @@
+hosts = openldap:3890
+dn = cn=admin,dc=AlpesNet,dc=local
+dnpass =jskrYrMtoP9QAUVx
+ldap_version = 3
+base = ou=people,dc=AlpesNet,dc=local
+scope = subtree
+auth_bind = yes
+pass_filter = (&(objectClass=inetOrgPerson)(uid=%n))
+user_filter = (&(objectClass=inetOrgPerson)(uid=%n))
+

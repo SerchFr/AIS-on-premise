@@ -1,0 +1,30 @@
+services:
+  roundcube:
+    image: roundcube/roundcubemail:latest
+    container_name: roundcube
+
+    ports:
+    - "8081:80"
+
+    environment:
+      ROUNDCUBEMAIL_DEFAULT_HOST: dovecot
+      ROUNDCUBEMAIL_DEFAULT_PORT: 143
+      ROUNDCUBEMAIL_SMTP_SERVER: postfix
+      ROUNDCUBEMAIL_SMTP_PORT: 25
+      ROUNDCUBEMAIL_DB_TYPE: sqlite
+
+    volumes:
+      - roundcube-data:/var/roundcube/db
+
+    restart: unless-stopped
+
+    networks:
+      - ldap-network
+
+networks:
+  ldap-network:
+    external: true
+      
+volumes:
+  roundcube-data:
+

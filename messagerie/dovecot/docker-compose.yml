@@ -1,0 +1,32 @@
+services:
+  dovecot:
+    build: .
+    container_name: dovecot
+    hostname: mail.AlpesNet.local
+
+    ports:
+      - "1143:143"
+
+    volumes:
+      - ./config/dovecot.conf:/etc/dovecot/dovecot.conf:ro
+      # Pour une connexion manuelle
+      #- ./config/passwd:/etc/dovecot/passwd:ro
+      # Pour utiliser ldap
+      - ./config/dovecot-ldap.conf.ext:/etc/dovecot/dovecot-ldap.conf.ext:ro
+      
+      #- maildata:/var/mail/vhosts
+      - mail_vhosts_data:/var/mail/vhosts   # was: dovecot_maildata:/var/mail/vhosts
+ 
+    restart: unless-stopped
+  
+    networks:
+      - ldap-network
+
+networks:
+  ldap-network:
+    external: true
+
+volumes:
+  mail_vhosts_data:
+    external: true
+#  maildata:

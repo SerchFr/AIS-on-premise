@@ -1,0 +1,68 @@
+#!/bin/bash
+# ============================================================
+# Auteur : [Sergio MARTINEZ] — Date : 2026-08-03
+# Module : Docker compose for openLDAP
+# 
+# Il crée un instance docker : 
+#
+# Docker compose
+#   1. Récupere l'image osixia/openldap
+#   2. Configure l'environnement AlpesNet.local
+#   3. Configure les ports   389:3890 et 636:6360
+#   4. Les volumes pour la persistence data, config et backup
+#
+# Usage :
+#       docker compose up -d
+#
+# Durée d'exécution : ~1 min le temps de télécharger l'image docker
+# ============================================================
+
+services:
+  openldap:
+    image: osixia/openldap:2.6.10-alpha
+    container_name: openldap
+    hostname: ldap.AlpesNet.local
+    restart: unless-stopped
+    
+    ports:
+      - "389:3890"
+      - "636:6360"
+      
+    networks:
+      - ldap-network
+    
+    environment:
+      OPENLDAP_BOOTSTRAP_ORGANIZATION: "AlpesNet Inc"
+      OPENLDAP_BOOTSTRAP_SUFFIX: "dc=AlpesNet,dc=local"
+      
+      #LDAP_ADMIN_PASSWORD: "CampusNumerique2026"
+      #LDAP_CONFIG_PASSWORD: "CampusNumerique2026"
+      
+    volumes:
+      - openldap-conf:/etc/openldap/slapd.d
+      - openldap-data:/var/lib/openldap/openldap-data
+      - openldap-backups:/var/lib/openldap/openldap-backups
+
+networks:
+  ldap-network:
+    external: true
+    
+volumes:
+  openldap-conf:
+  openldap-data:
+  openldap-backups:
+
+
+
+
+
+#docker run --name openldap --hostname ldap.AlpesNet.local -p 389:3890 -p 636:6360 \
+#  -e OPENLDAP_BOOTSTRAP_ORGANIZATION="AlpesNet" \
+#  -e OPENLDAP_BOOTSTRAP_SUFFIX="dc=AlpesNet,dc=local" \
+#  -v openldap-conf:/etc/openldap/slapd.d \
+#  -v openldap-data:/var/lib/openldap/openldap-data \
+#  -v openldap-backups:/var/lib/openldap/openldap-backups \
+#  osixia/openldap
+  
+  
+  

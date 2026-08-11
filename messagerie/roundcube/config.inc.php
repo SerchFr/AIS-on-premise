@@ -1,6 +1,6 @@
-$config['default_host'] = 'ssl://mail.entreprise.local';
+$config['default_host'] = 'ssl://mail.alpesnet.local';
 
-$config['smtp_server'] = 'tls://mail.entreprise.local';
+$config['smtp_server'] = 'tls://mail.alpesnet.local';
 
 $config['smtp_port'] = 587;
 

@@ -26,7 +26,7 @@ virtual_mailbox_base = /var/mail/vhosts
 #virtual_mailbox_maps = texthash:/etc/postfix/vmailbox
 
 # Utiliser ldap
-virtual_mailbox_maps = ldap:/etc/postfix/ldap-virtual-mailbox.cf.
+virtual_mailbox_maps = ldap:/etc/postfix/ldap-virtual-mailbox.cf
 
 
 

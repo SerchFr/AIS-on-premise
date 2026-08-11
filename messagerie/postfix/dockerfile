@@ -6,6 +6,7 @@ RUN echo "postfix postfix/mailname string AlpesNet.local" | debconf-set-selectio
    && echo "postfix postfix/main_mailer_type string 'Internet Site'" | debconf-set-selections \
    && apt-get update \
    && apt-get install -y \
+   netcat-openbsd \
    postfix \
    postfix-ldap \
    ldap-utils

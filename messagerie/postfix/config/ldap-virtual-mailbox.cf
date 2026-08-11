@@ -6,5 +6,5 @@ bind_dn = cn=admin,dc=AlpesNet,dc=local
 bind_pw = jskrYrMtoP9QAUVx
 query_filter = (&(objectClass=inetOrgPerson)(mail=%s))
 result_attribute = mail
-result_format = AlpesNet.local/%U/
+result_format = alpesnet.local/%U/
 domain = AlpesNet.local
