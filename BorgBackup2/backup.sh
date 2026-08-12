@@ -16,6 +16,7 @@ if [ ! -f "${BORG_KEY_FILE}" ]; then
 fi
 
 ARCHIVE_NAME="${ARCHIVE_NAME_PREFIX:-backup}-{now:%Y-%m-%d_%H-%M-%S}"
+CA_ARCHIVE_NAME="CA-{now:%Y-%m-%d_%H-%M-%S}"
 
 echo "=== $(date -Iseconds) : starting backup ==="
 
@@ -61,6 +62,8 @@ fi
 # Backs up everything mounted under /data (including ldap-dumps/ and
 # ldap-raw/ if you added those volumes). Add/remove what's included by
 # editing the volumes section of docker-compose.yml, not this script.
+echo "=== $(date -Iseconds) : starting ldap backup ==="
+
 borg create \
     --stats \
     --compression lz4 \
@@ -69,14 +72,27 @@ borg create \
     "${BORG_REPO}::${ARCHIVE_NAME}" \
     /data
 
-echo "=== $(date -Iseconds) : pruning old archives ==="
+echo "=== $(date -Iseconds) : starting CA backup ==="
 
-borg prune \
-    --list \
-    --keep-daily="${KEEP_DAILY:-7}" \
-    --keep-weekly="${KEEP_WEEKLY:-4}" \
-    --keep-monthly="${KEEP_MONTHLY:-6}" \
-    "${BORG_REPO}"
+borg create \
+    --stats \
+    --compression lz4 \
+    --exclude-caches \
+    --exclude '/data/dockersConfig/ca/data' \
+    "${BORG_REPO}::${CA_ARCHIVE_NAME}" \
+    /data/dockersConfig/ca
+
+echo "=== $(date -Iseconds) : CA backup complete ==="
+
+
+#echo "=== $(date -Iseconds) : pruning old archives ==="
+
+#borg prune \
+#    --list \
+#    --keep-daily="${KEEP_DAILY:-7}" \
+#    --keep-weekly="${KEEP_WEEKLY:-4}" \
+#    --keep-monthly="${KEEP_MONTHLY:-6}" \
+#    "${BORG_REPO}"
 
 echo "=== $(date -Iseconds) : compacting repo ==="
 borg compact "${BORG_REPO}"

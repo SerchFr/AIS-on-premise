@@ -23,7 +23,11 @@ services:
 
       # Configurations, files that we will find also in git
       - /home/sergio/Documents/AIS/on-premise/openldap:/data/dockersConfig/openldap:ro
-      #- /home/sergio/Documents/AIS/on-premise/openldap:/data/dockersConfig/openldap:ro
+      - /home/sergio/Documents/AIS/on-premise/ca:/data/dockersConfig/ca:ro
+      - /home/sergio/Documents/AIS/on-premise/messagerie:/data/dockersConfig/messagerie:ro
+      - /home/sergio/Documents/AIS/on-premise/LDAPAccountManagerHTTPS:/data/dockersConfig/LDAPAccountManagerHTTPS:ro
+      - /home/sergio/Documents/AIS/on-premise/certificates:/data/dockersConfig/certificates:ro
+      
       #- /home/sergio/Documents/AIS/on-premise/openldap:/data/dockersConfig/openldap:ro
       #- /home/sergio/Documents/AIS/on-premise/openldap:/data/dockersConfig/openldap:ro
       #- /etc:/data/etc:ro
