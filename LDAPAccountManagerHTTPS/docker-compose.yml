@@ -19,9 +19,11 @@
 
 services:
   lam:
-    image: ldapaccountmanager/lam:latest
+    #image: ldapaccountmanager/lam:latest
+    build:
+      context: ./apache
     container_name: lam
-    hostname: lam.AlpesNet.local
+    hostname: lam.alpesnet.local
     restart: unless-stopped
     
     networks:
@@ -33,13 +35,20 @@ services:
       LDAP_DOMAIN: AlpesNet.local
       LDAP_PORT: "3890"
 
+    volumes:
+      - lam_config:/var/lib/ldap-account-manager/config
+     # Certificates
+      - ./../certificates/lam/ldap.crt:/etc/ssl/lam/ldap.crt:ro
+      - ./../certificates/lam/ldap.key:/etc/ssl/lam/ldap.key:ro
+      
+      # Apache SSL configuration
+      - ./apache/lam-ssl.conf:/etc/apache2/sites-available/lam-ssl.conf:ro
+ 
     depends_on: []
       
     ports:
       - "8080:80"
-      
-    volumes:
-      - lam_config:/var/lib/ldap-account-manager/config
+      - "8444:443"
 
 networks:
   ldap-network:
