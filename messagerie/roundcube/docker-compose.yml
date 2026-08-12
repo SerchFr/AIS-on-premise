@@ -1,10 +1,14 @@
 services:
   roundcube:
-    image: roundcube/roundcubemail:latest
+    #image: roundcube/roundcubemail:latest
+    build:
+      context: ./apache
+      
     container_name: roundcube
 
     ports:
     - "8081:80"
+    - "8443:443"
 
     environment:
       ROUNDCUBEMAIL_DEFAULT_HOST: dovecot
@@ -15,7 +19,14 @@ services:
 
     volumes:
       - roundcube-data:/var/roundcube/db
-
+      
+      # Certificates
+      - ./../../certificates/roundcube/mail.crt:/etc/ssl/roundcube/mail.crt:ro
+      - ./../../certificates/roundcube/mail.key:/etc/ssl/roundcube/mail.key:ro
+ 
+      # Apache SSL configuration
+      - ./apache/roundcube-ssl.conf:/etc/apache2/sites-available/roundcube-ssl.conf:ro
+      
     restart: unless-stopped
 
     networks:
