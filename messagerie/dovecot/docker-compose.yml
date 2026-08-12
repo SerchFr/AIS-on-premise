@@ -21,6 +21,7 @@ services:
       #- maildata:/var/mail/vhosts
       - mail_vhosts_data:/var/mail/vhosts   # was: dovecot_maildata:/var/mail/vhosts
 
+      - postfix-sasl:/var/spool/postfix/private
  
     restart: unless-stopped
   
@@ -32,6 +33,10 @@ networks:
     external: true
 
 volumes:
+  postfix-sasl:
+    name: postfix-sasl
+    external: true
   mail_vhosts_data:
     external: true
+    
 #  maildata:

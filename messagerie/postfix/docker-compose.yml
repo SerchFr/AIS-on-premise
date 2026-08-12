@@ -16,6 +16,7 @@ services:
     # Pour utilsier ldap
     - ./config/ldap-virtual-mailbox.cf:/etc/postfix/ldap-virtual-mailbox.cf:ro
     #- maildata:/var/mail/vhosts
+    - postfix-sasl:/var/spool/postfix/private
 
     restart: unless-stopped
 
@@ -27,6 +28,9 @@ networks:
     external: true
     
 volumes:
+  postfix-sasl:
+    name: postfix-sasl
+    external: true
   mail_vhosts_data:
     external: true
 #  maildata:
